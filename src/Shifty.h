@@ -3,43 +3,29 @@
 
 #include <Arduino.h>
 
+const byte WRITE_BUFFER = 4;
+
 class Shifty {
   public:
 
-  Shifty();
+  Shifty(byte count);
 
-  void setBitCount(int bitCount);
-  void setPins(int dataPin, int clockPin, int latchPin, int readPin);
-  void setPins(int dataPin, int clockPin, int latchPin);
-  void bitMode(int bitnum, bool mode);
-  void batchWriteBegin();
-  void batchWriteEnd();
-  void batchReadBegin();
-  void batchReadEnd();
-  void writeBit(int bitnum, bool value);
-  bool readBit(int bitnum);
+  void setPins(byte dataPin, byte clockPin, byte latchPin);
+  void writeByte(byte value);
+  void flush();
+  void resetIndex();
 
   private:
 
-  int dataPin;
-  int clockPin;
-  int readPin;
-  int latchPin;
+  byte dataPin;
+  byte clockPin;
+  byte latchPin;
   
-  int bitCount;
-  int byteCount;
-  byte writeBuffer[16];
-  byte dataModes[16];
-  byte readBuffer[16];
-  bool batchWriteMode;
-  bool batchReadMode;
-
-  void writeAllBits();
-  void readAllBits();
-  void writeBitHard(int bitnum, bool value);
-  void writeBitSoft(int bitnum, bool value);
-  bool readBitHard(int bitnum);
-  bool readBitSoft(int bitnum);
+  byte byteCount;
+  byte byteIndex;
+  byte writeBuffer[WRITE_BUFFER];
+  
+  void writeAllBytes();
 };
 
 #endif
